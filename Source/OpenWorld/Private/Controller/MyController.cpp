@@ -3,7 +3,7 @@
 
 #include "Controller/MyController.h"
 
-#include "Input/MyEnhancedInputComponent.h"
+#include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 
 AMyController::AMyController()
@@ -21,6 +21,12 @@ void AMyController::BeginPlay()
 	{
 		Subsystem->AddMappingContext(MyContext, 0);
 	}
+	if (APawn* ControlledPawn = GetPawn<APawn>())
+	{
+		ControlledPawn->bUseControllerRotationPitch = true;
+		ControlledPawn->bUseControllerRotationRoll = true;
+		ControlledPawn->bUseControllerRotationYaw = true;
+	}
 }
 
 void AMyController::SetupInputComponent()
@@ -29,11 +35,37 @@ void AMyController::SetupInputComponent()
 
 	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
 	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMyController::Move);
+	EnhancedInputComponent->BindAction(TurnAction, ETriggerEvent::Triggered, this, &AMyController::Turn);
+	EnhancedInputComponent->BindAction(LookUpAction, ETriggerEvent::Triggered, this, &AMyController::LookUp);
 }
 
 void AMyController::Move(const FInputActionValue& InputActionValue)
 {
 	const float InputAxis = InputActionValue.Get<float>();
+	
+	if (APawn* ControlledPawn = GetPawn<APawn>())
+	{
+		ControlledPawn->AddMovementInput(ControlledPawn->GetActorForwardVector(), InputAxis);
+	}
+}
 
-	UE_LOG(LogTemp, Warning, TEXT("float : %f"), InputAxis);
+void AMyController::Turn(const FInputActionValue& InputActionValue)
+{
+	const float InputAxis = InputActionValue.Get<float>();
+
+	if (APawn* ControlledPawn = GetPawn<APawn>())
+	{
+		ControlledPawn->AddControllerYawInput(InputAxis);
+	}
+	
+}
+
+void AMyController::LookUp(const FInputActionValue& InputActionValue)
+{
+	const float InputAxis = InputActionValue.Get<float>();
+	
+	if (APawn* ControlledPawn = GetPawn<APawn>())
+	{
+		ControlledPawn->AddControllerPitchInput(InputAxis);
+	}
 }
