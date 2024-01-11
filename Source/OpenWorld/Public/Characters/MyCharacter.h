@@ -8,6 +8,7 @@
 
 class USpringArmComponent;
 class UCameraComponent;
+class UGroomComponent;
 
 UCLASS()
 class OPENWORLD_API AMyCharacter : public ACharacter
@@ -35,4 +36,10 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* Camera;
+	
+	UPROPERTY(VisibleAnywhere, Category = Hair)
+	UGroomComponent* Hair;
+
+	UPROPERTY(VisibleAnywhere, Category = Hair)
+	UGroomComponent* Eyebrows;
 };
