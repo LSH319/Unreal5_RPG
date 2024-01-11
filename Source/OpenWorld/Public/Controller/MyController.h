@@ -36,7 +36,11 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> LookUpAction;
 	
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> JumpAction;
+	
 	void Move(const FInputActionValue& InputActionValue);
 	void Turn(const FInputActionValue& InputActionValue);
 	void LookUp(const FInputActionValue& InputActionValue);
+	void Jump(const FInputActionValue& InputActionValue);
 };

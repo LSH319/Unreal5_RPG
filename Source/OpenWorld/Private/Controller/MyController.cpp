@@ -5,6 +5,7 @@
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "GameFramework/Character.h"
 
 AMyController::AMyController()
 {
@@ -32,6 +33,7 @@ void AMyController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMyController::Move);
 	EnhancedInputComponent->BindAction(TurnAction, ETriggerEvent::Triggered, this, &AMyController::Turn);
 	EnhancedInputComponent->BindAction(LookUpAction, ETriggerEvent::Triggered, this, &AMyController::LookUp);
+	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AMyController::Jump);
 }
 
 void AMyController::Move(const FInputActionValue& InputActionValue)
@@ -69,5 +71,13 @@ void AMyController::LookUp(const FInputActionValue& InputActionValue)
 	if (APawn* ControlledPawn = GetPawn<APawn>())
 	{
 		ControlledPawn->AddControllerPitchInput(InputAxis);
+	}
+}
+
+void AMyController::Jump(const FInputActionValue& InputActionValue)
+{
+	if (ACharacter* ControlledCharacter = GetCharacter())
+	{
+		ControlledCharacter->Jump();
 	}
 }
