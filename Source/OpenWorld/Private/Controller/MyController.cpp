@@ -5,7 +5,9 @@
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Characters/MyCharacter.h"
 #include "GameFramework/Character.h"
+#include "Items/Weapons/Weapon.h"
 
 AMyController::AMyController()
 {
@@ -34,6 +36,7 @@ void AMyController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(TurnAction, ETriggerEvent::Triggered, this, &AMyController::Turn);
 	EnhancedInputComponent->BindAction(LookUpAction, ETriggerEvent::Triggered, this, &AMyController::LookUp);
 	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AMyController::Jump);
+	EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &AMyController::Equip);
 }
 
 void AMyController::Move(const FInputActionValue& InputActionValue)
@@ -79,5 +82,18 @@ void AMyController::Jump(const FInputActionValue& InputActionValue)
 	if (ACharacter* ControlledCharacter = GetCharacter())
 	{
 		ControlledCharacter->Jump();
+	}
+}
+
+void AMyController::Equip(const FInputActionValue& InputActionValue)
+{
+	ACharacter* ControlledCharacter = GetCharacter();
+	if (AMyCharacter* MyCharacter = Cast<AMyCharacter>(ControlledCharacter))
+	{
+		if(AWeapon* Weapon = Cast<AWeapon>(MyCharacter->GetOverlappingItem()))
+		{
+			Weapon->Equip(MyCharacter->GetMesh(),FName("RightHandSocket"));
+		}
+		
 	}
 }

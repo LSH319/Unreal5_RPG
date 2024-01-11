@@ -9,6 +9,7 @@
 class USpringArmComponent;
 class UCameraComponent;
 class UGroomComponent;
+class AItem;
 
 UCLASS()
 class OPENWORLD_API AMyCharacter : public ACharacter
@@ -42,4 +43,11 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = Hair)
 	UGroomComponent* Eyebrows;
+
+	UPROPERTY(VisibleInstanceOnly)
+	AItem* OverlappingItem;
+
+public:
+	FORCEINLINE void SetOverlappingItem(AItem* Item){ OverlappingItem = Item; }
+	FORCEINLINE AItem* GetOverlappingItem(){ return OverlappingItem; }
 };
