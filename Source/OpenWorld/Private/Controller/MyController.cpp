@@ -8,6 +8,7 @@
 
 AMyController::AMyController()
 {
+
 }
 
 void AMyController::BeginPlay()
@@ -20,12 +21,6 @@ void AMyController::BeginPlay()
 	if (Subsystem)
 	{
 		Subsystem->AddMappingContext(MyContext, 0);
-	}
-	if (APawn* ControlledPawn = GetPawn<APawn>())
-	{
-		ControlledPawn->bUseControllerRotationPitch = true;
-		ControlledPawn->bUseControllerRotationRoll = true;
-		ControlledPawn->bUseControllerRotationYaw = true;
 	}
 }
 
@@ -41,11 +36,18 @@ void AMyController::SetupInputComponent()
 
 void AMyController::Move(const FInputActionValue& InputActionValue)
 {
-	const float InputAxis = InputActionValue.Get<float>();
-	
+	const FVector2D InputAxisVector = InputActionValue.Get<FVector2D>();
+
+	const FRotator Rotaion = GetControlRotation();
+	const FRotator YawRotaion(0.f, Rotaion.Yaw, 0.f);
+
+	const FVector FowardDirection = FRotationMatrix(YawRotaion).GetUnitAxis(EAxis::X);
+	const FVector RightDirection = FRotationMatrix(YawRotaion).GetUnitAxis(EAxis::Y);
+
 	if (APawn* ControlledPawn = GetPawn<APawn>())
 	{
-		ControlledPawn->AddMovementInput(ControlledPawn->GetActorForwardVector(), InputAxis);
+		ControlledPawn->AddMovementInput(FowardDirection, InputAxisVector.X);
+		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.Y);
 	}
 }
 
