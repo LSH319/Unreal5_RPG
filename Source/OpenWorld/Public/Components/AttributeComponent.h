@@ -24,6 +24,9 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	void ReceiveDamage(float Damage);
+	float GetHealthPercent();
+	
 private:
 	// Current Health
 	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
@@ -31,5 +34,4 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
 	float MaxHealth;
-		
 };
