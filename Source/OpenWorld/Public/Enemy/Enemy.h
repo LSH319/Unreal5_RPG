@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CharacterTypes.h"
 #include "GameFramework/Character.h"
 #include "Interfaces/HitInterface.h"
 #include "Enemy.generated.h"
@@ -25,6 +26,11 @@ protected:
 	virtual void BeginPlay() override;
 
 	void PlayHitReactMontage(const FName& SectionName);
+
+	void Die();
+
+	UPROPERTY(BlueprintReadOnly)
+	EDeathPose DeathPose = EDeathPose::EDP_Alive;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -37,7 +43,7 @@ public:
 	void DirectionalHitReact(const FVector& ImpactPoint);
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 private:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UAttributeComponent* Attributes;
 	
 	UPROPERTY(VisibleAnywhere)
@@ -45,10 +51,19 @@ private:
 	
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	UAnimMontage* HitReactMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	UAnimMontage* DeathMontage;
 	
 	UPROPERTY(EditAnywhere, Category = Sounds)
 	USoundBase* HitSound;
 
 	UPROPERTY(EditAnywhere, Category = VisualEffects)
 	UParticleSystem* HitParticles;
+	
+	UPROPERTY()
+	AActor* CombatTarget;
+
+	UPROPERTY(EditAnywhere)
+	double CombatRadius = 500.f;
 };

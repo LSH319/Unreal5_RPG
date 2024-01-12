@@ -26,7 +26,7 @@ public:
 
 	void ReceiveDamage(float Damage);
 	float GetHealthPercent();
-	
+	bool IsAlive();
 private:
 	// Current Health
 	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
