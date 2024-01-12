@@ -151,7 +151,7 @@ void AMyController::Attack(const FInputActionValue& InputActionValue)
 	// }
 }
 
-void AMyController::PlayEquipMontage(FName SectionName)
+void AMyController::PlayEquipMontage(const FName& SectionName)
 {
 	UAnimInstance* AnimInstance = GetCharacter()->GetMesh()->GetAnimInstance();
 	if (AMyCharacter* MyCharacter = Cast<AMyCharacter>(GetCharacter()))
