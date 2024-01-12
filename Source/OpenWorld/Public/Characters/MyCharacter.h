@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CharacterTypes.h"
 #include "GameFramework/Character.h"
 #include "MyCharacter.generated.h"
 
@@ -47,7 +48,11 @@ private:
 	UPROPERTY(VisibleInstanceOnly)
 	AItem* OverlappingItem;
 
+	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
 public:
 	FORCEINLINE void SetOverlappingItem(AItem* Item){ OverlappingItem = Item; }
 	FORCEINLINE AItem* GetOverlappingItem(){ return OverlappingItem; }
+	FORCEINLINE void SetCharacterState(ECharacterState NewCharacterState){ CharacterState = NewCharacterState; }
+	UFUNCTION(BlueprintPure)
+	FORCEINLINE ECharacterState GetCharacterState() const { return CharacterState; }
 };

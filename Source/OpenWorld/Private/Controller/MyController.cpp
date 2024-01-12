@@ -92,7 +92,7 @@ void AMyController::Equip(const FInputActionValue& InputActionValue)
 	{
 		if(AWeapon* Weapon = Cast<AWeapon>(MyCharacter->GetOverlappingItem()))
 		{
-			Weapon->Equip(MyCharacter->GetMesh(),FName("RightHandSocket"));
+			Weapon->Equip(MyCharacter,FName("RightHandSocket"));
 		}
 		
 	}
