@@ -24,6 +24,7 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly)
 	ECharacterState WeaponEquipState = ECharacterState::ECS_EquippedOneHandedWeapon;
+	TArray<AActor*> IgnoreActors;
 protected:
 	virtual void BeginPlay() override;
 	
@@ -43,7 +44,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* BoxTraceEnd;
-	
+
 public:
 	FORCEINLINE UBoxComponent* GetWeaponBox() const { return WeaponBox; }
 };
