@@ -6,6 +6,7 @@
 #include "Characters/MyCharacter.h"
 #include "Components/BoxComponent.h"
 #include "Components/SphereComponent.h"
+#include "Interfaces/HitInterface.h"
 #include "Kismet/GameplayStatics.h"
 
 AWeapon::AWeapon()
@@ -80,6 +81,14 @@ void AWeapon::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 		BoxHit,
 		true
 	);
+	if (BoxHit.GetActor())
+	{
+		IHitInterface* HitInterface = Cast<IHitInterface>(BoxHit.GetActor());
+		if (HitInterface)
+		{
+			HitInterface->GetHit(BoxHit.ImpactPoint);
+		}
+	}
 }
 
 void AWeapon::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
