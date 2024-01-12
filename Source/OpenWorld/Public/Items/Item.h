@@ -30,10 +30,9 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* ItemMesh;
 	
+	UPROPERTY(VisibleAnywhere)
+	USphereComponent* Sphere;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	
-	UPROPERTY(VisibleAnywhere)
-	USphereComponent* Sphere;
 };

@@ -45,7 +45,7 @@ void AMyController::Move(const FInputActionValue& InputActionValue)
 	ACharacter* ControlledCharacter = GetCharacter();
 	if (AMyCharacter* MyCharacter = Cast<AMyCharacter>(ControlledCharacter))
 	{
-		if(EActionState::EAS_Attacking == MyCharacter->GetActionState())return;;
+		if(EActionState::EAS_Unoccupied != MyCharacter->GetActionState())return;;
 	}
 	const FVector2D InputAxisVector = InputActionValue.Get<FVector2D>();
 
@@ -108,12 +108,14 @@ void AMyController::Equip(const FInputActionValue& InputActionValue)
 				if(MyCharacter->GetCharacterState() != ECharacterState::ECS_Unequipped) // if arming
                 {
 					MyCharacter->SetCharacterState(ECharacterState::ECS_Unequipped);
+					MyCharacter->SetActionState(EActionState::EAS_EquippingWeapon);
                 	PlayEquipMontage(FName("UnEquip"));
                 }
 				else if(MyCharacter->GetCharacterState() == ECharacterState::ECS_Unequipped &&
 					MyCharacter->GetEquippedWeapon()) // if disarmin
 				{
 					MyCharacter->SetCharacterState(MyCharacter->GetEquippedWeapon()->WeaponEquipState);
+					MyCharacter->SetActionState(EActionState::EAS_EquippingWeapon);
 					PlayEquipMontage(FName("Equip"));
 				}
 			}
