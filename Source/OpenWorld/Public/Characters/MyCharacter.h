@@ -48,11 +48,22 @@ private:
 	UPROPERTY(VisibleInstanceOnly)
 	AItem* OverlappingItem;
 
+	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	UAnimMontage* AttackMontage;
+	
 	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
+	EActionState ActionState = EActionState::EAS_Unoccupied;
 public:
 	FORCEINLINE void SetOverlappingItem(AItem* Item){ OverlappingItem = Item; }
 	FORCEINLINE AItem* GetOverlappingItem(){ return OverlappingItem; }
 	FORCEINLINE void SetCharacterState(ECharacterState NewCharacterState){ CharacterState = NewCharacterState; }
 	UFUNCTION(BlueprintPure)
 	FORCEINLINE ECharacterState GetCharacterState() const { return CharacterState; }
+	UFUNCTION(BlueprintPure)
+	FORCEINLINE UAnimMontage* GetAttackMontage() const { return AttackMontage; }
+	
+	UFUNCTION(BlueprintCallable)
+	void SetActionState(EActionState NewActionState)  { ActionState = NewActionState; }
+	UFUNCTION(BlueprintPure)
+	EActionState GetActionState() const { return ActionState; }
 };

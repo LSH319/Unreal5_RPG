@@ -41,10 +41,14 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> EquipAction;
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> AttackAction;
 	
 	void Move(const FInputActionValue& InputActionValue);
 	void Turn(const FInputActionValue& InputActionValue);
 	void LookUp(const FInputActionValue& InputActionValue);
 	void Jump(const FInputActionValue& InputActionValue);
 	void Equip(const FInputActionValue& InputActionValue);
+	void Attack(const FInputActionValue& InputActionValue);
 };

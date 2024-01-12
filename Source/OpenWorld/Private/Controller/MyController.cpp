@@ -37,10 +37,16 @@ void AMyController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(LookUpAction, ETriggerEvent::Triggered, this, &AMyController::LookUp);
 	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AMyController::Jump);
 	EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &AMyController::Equip);
+	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AMyController::Attack);
 }
 
 void AMyController::Move(const FInputActionValue& InputActionValue)
 {
+	ACharacter* ControlledCharacter = GetCharacter();
+	if (AMyCharacter* MyCharacter = Cast<AMyCharacter>(ControlledCharacter))
+	{
+		if(EActionState::EAS_Attacking == MyCharacter->GetActionState())return;;
+	}
 	const FVector2D InputAxisVector = InputActionValue.Get<FVector2D>();
 
 	const FRotator Rotaion = GetControlRotation();
@@ -96,4 +102,32 @@ void AMyController::Equip(const FInputActionValue& InputActionValue)
 		}
 		
 	}
+}
+
+void AMyController::Attack(const FInputActionValue& InputActionValue)
+{
+	// UAnimInstance* AnimInstance = GetCharacter()->GetMesh()->GetAnimInstance();
+	// UAnimMontage* AttackMontage;
+	// if(AMyCharacter* MyCharacter = Cast<AMyCharacter>(ControlledCharacter))
+	// {
+	// 	AttackMontage = MyCharacter->AttackMontage;
+	// }
+	// if (AnimInstance && AttackMontage)
+	// {
+	// 	AnimInstance->Montage_Play(AttackMontage);
+	// 	int32 Selection = FMath::RandRange(0, 1);
+	// 	FName SectionName = FName();
+	// 	switch (Selection)
+	// 	{
+	// 	case 0:
+	// 		SectionName = FName("Attack1");
+	// 		break;
+	// 	case 1:
+	// 		SectionName = FName("Attack2");
+	// 		break;
+	// 	default:
+	// 		break;
+	// 	}
+	// 	AnimInstance->Montage_JumpToSection(SectionName, AttackMontage);
+	// }
 }
