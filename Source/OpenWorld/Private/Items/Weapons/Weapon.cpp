@@ -8,6 +8,7 @@
 #include "Components/SphereComponent.h"
 #include "Interfaces/HitInterface.h"
 #include "Kismet/GameplayStatics.h"
+#include "NiagaraComponent.h"
 
 AWeapon::AWeapon()
 {
@@ -43,6 +44,10 @@ void AWeapon::Equip(ACharacter* EquipCharacter, FName InSocketName)
 	if (Sphere)
 	{
 		Sphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+	if (EmbersEffect)
+	{
+		EmbersEffect->Deactivate();
 	}
 }
 
