@@ -99,8 +99,25 @@ void AMyController::Equip(const FInputActionValue& InputActionValue)
 		if(AWeapon* Weapon = Cast<AWeapon>(MyCharacter->GetOverlappingItem()))
 		{
 			Weapon->Equip(MyCharacter,FName("RightHandSocket"));
+			MyCharacter->SetOverlappingItem(nullptr);
 		}
-		
+		else
+		{
+			if(MyCharacter->GetActionState() == EActionState::EAS_Unoccupied) // not attack
+			{
+				if(MyCharacter->GetCharacterState() != ECharacterState::ECS_Unequipped) // if arming
+                {
+					MyCharacter->SetCharacterState(ECharacterState::ECS_Unequipped);
+                	PlayEquipMontage(FName("UnEquip"));
+                }
+				else if(MyCharacter->GetCharacterState() == ECharacterState::ECS_Unequipped &&
+					MyCharacter->GetEquippedWeapon()) // if disarmin
+				{
+					MyCharacter->SetCharacterState(MyCharacter->GetEquippedWeapon()->WeaponEquipState);
+					PlayEquipMontage(FName("Equip"));
+				}
+			}
+		}
 	}
 }
 
@@ -130,4 +147,18 @@ void AMyController::Attack(const FInputActionValue& InputActionValue)
 	// 	}
 	// 	AnimInstance->Montage_JumpToSection(SectionName, AttackMontage);
 	// }
+}
+
+void AMyController::PlayEquipMontage(FName SectionName)
+{
+	UAnimInstance* AnimInstance = GetCharacter()->GetMesh()->GetAnimInstance();
+	if (AMyCharacter* MyCharacter = Cast<AMyCharacter>(GetCharacter()))
+	{
+		UAnimMontage* EquipMontage = MyCharacter->GetEquipMontage();
+		if(AnimInstance && EquipMontage)
+        {
+        	AnimInstance->Montage_Play(EquipMontage);
+        	AnimInstance->Montage_JumpToSection(SectionName, EquipMontage);
+        }
+	}
 }

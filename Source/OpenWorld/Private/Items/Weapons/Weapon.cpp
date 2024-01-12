@@ -12,6 +12,7 @@ void AWeapon::Equip(ACharacter* EquipCharacter, FName InSocketName)
 	if (AMyCharacter* MyCharacter = Cast<AMyCharacter>(EquipCharacter))
 	{
 		MyCharacter->SetCharacterState(WeaponEquipState);
+		MyCharacter->SetEquippedWeapon(this);
 	}
 }
 

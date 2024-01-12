@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "MyCharacter.generated.h"
 
+class AWeapon;
 class USpringArmComponent;
 class UCameraComponent;
 class UGroomComponent;
@@ -48,19 +49,35 @@ private:
 	UPROPERTY(VisibleInstanceOnly)
 	AItem* OverlappingItem;
 
+	UPROPERTY(VisibleAnywhere, Category = Weapon)
+	AWeapon* EquippedWeapon;
+	
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	UAnimMontage* AttackMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	UAnimMontage* EquipMontage;
 	
+	UPROPERTY(VisibleAnywhere)
 	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
+	UPROPERTY(VisibleAnywhere)
 	EActionState ActionState = EActionState::EAS_Unoccupied;
 public:
 	FORCEINLINE void SetOverlappingItem(AItem* Item){ OverlappingItem = Item; }
 	FORCEINLINE AItem* GetOverlappingItem(){ return OverlappingItem; }
+	
+	FORCEINLINE void SetEquippedWeapon(AWeapon* NewWeapon){ EquippedWeapon = NewWeapon; }
+	FORCEINLINE AWeapon* GetEquippedWeapon(){ return EquippedWeapon; }
+	
 	FORCEINLINE void SetCharacterState(ECharacterState NewCharacterState){ CharacterState = NewCharacterState; }
 	UFUNCTION(BlueprintPure)
 	FORCEINLINE ECharacterState GetCharacterState() const { return CharacterState; }
+	
 	UFUNCTION(BlueprintPure)
 	FORCEINLINE UAnimMontage* GetAttackMontage() const { return AttackMontage; }
+	
+	UFUNCTION(BlueprintPure)
+	UAnimMontage* GetEquipMontage() const { return EquipMontage; }
 	
 	UFUNCTION(BlueprintCallable)
 	void SetActionState(EActionState NewActionState)  { ActionState = NewActionState; }
