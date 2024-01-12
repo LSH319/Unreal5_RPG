@@ -7,6 +7,8 @@
 #include "Interfaces/HitInterface.h"
 #include "Enemy.generated.h"
 
+class UHealthBarComponent;
+class UAttributeComponent;
 class UAnimMontage;
 
 UCLASS()
@@ -34,6 +36,12 @@ public:
 
 	void DirectionalHitReact(const FVector& ImpactPoint);
 private:
+	UPROPERTY(VisibleAnywhere)
+	UAttributeComponent* Attributes;
+	
+	UPROPERTY(VisibleAnywhere)
+	UHealthBarComponent* HealthBarWidget;
+	
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	UAnimMontage* HitReactMontage;
 	

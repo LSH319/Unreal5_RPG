@@ -3,7 +3,9 @@
 
 #include "Enemy/Enemy.h"
 
+#include "Components/AttributeComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "HUD/HealthBarComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
@@ -18,13 +20,20 @@ AEnemy::AEnemy()
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 	GetMesh()->SetGenerateOverlapEvents(true);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+
+	Attributes = CreateDefaultSubobject<UAttributeComponent>(TEXT("Attributes"));
+	HealthBarWidget = CreateDefaultSubobject<UHealthBarComponent>(TEXT("HealthBar"));
+	HealthBarWidget->SetupAttachment(GetRootComponent());
 }
 
 // Called when the game starts or when spawned
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	if (HealthBarWidget)
+	{
+		HealthBarWidget->SetHealthPercent(1.f);
+	}
 }
 
 void AEnemy::PlayHitReactMontage(const FName& SectionName)
