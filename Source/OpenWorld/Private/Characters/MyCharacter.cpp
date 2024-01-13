@@ -44,6 +44,7 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	Tags.Add(FName("SlashCharacter"));
 }
 
 void AMyCharacter::Disarm()
