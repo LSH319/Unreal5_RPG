@@ -35,7 +35,6 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void FinishEquipping();
 
-	virtual void PlayAttackMontage() override;
 	virtual bool CanAttack() override;
 public:	
 	// Called every frame

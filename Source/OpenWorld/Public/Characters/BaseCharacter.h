@@ -17,25 +17,40 @@ class OPENWORLD_API ABaseCharacter : public ACharacter, public IHitInterface
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	ABaseCharacter();
+	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintCallable)
+	void SetWeaponCollisionEnabled(ECollisionEnabled::Type CollisionEnabled);
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void Attack();
+	virtual void Die();
+
+	void PlayHitReactMontage(const FName& SectionName);
+	void DirectionalHitReact(const FVector& ImpactPoint);
+	void PlayHitSound(const FVector& ImpactPoint);
+	void SpawnHitParticles(const FVector& ImpactPoint);
+	virtual void HandleDamage(float DamageAmount);
+	void PlayMontageSection(UAnimMontage* Montage, const FName& SectionName);
+	int32 PlayRandomMontageSection(UAnimMontage* Montage, const TArray<FName>& SectionNames);
+	virtual int32 PlayAttackMontage();
+	virtual int32 PlayDeathMontage();
+	void DisableCapsule();
+
+	virtual bool CanAttack();
+	bool IsAlive();
+
+	UFUNCTION(BlueprintCallable)
+	virtual void AttackEnd();
 
 	UPROPERTY(VisibleAnywhere, Category = Weapon)
 	AWeapon* EquippedWeapon;
 
-	virtual void PlayAttackMontage();
-	virtual bool CanAttack();
-	virtual void Die();
-	virtual void PlayHitReactMontage(const FName& SectionName);
-	void DirectionalHitReact(const FVector& ImpactPoint);
-	
-	UFUNCTION(BlueprintCallable)
-	virtual void AttackEnd();
-	
+	/**
+	* Animation montages
+	*/
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	UAnimMontage* AttackMontage;
 
@@ -44,23 +59,24 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	UAnimMontage* DeathMontage;
-	
+
+	UPROPERTY(EditAnywhere, Category = Combat)
+	TArray<FName> AttackMontageSections;
+
+	UPROPERTY(EditAnywhere, Category = Combat)
+	TArray<FName> DeathMontageSections;
+
+	/*
+	* Components
+	*/
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UAttributeComponent* Attributes;
 
+private:
 	UPROPERTY(EditAnywhere, Category = Sounds)
 	USoundBase* HitSound;
 
 	UPROPERTY(EditAnywhere, Category = VisualEffects)
 	UParticleSystem* HitParticles;
-	
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	virtual void Attack();
-	
-	UFUNCTION(BlueprintCallable)
-	void SetWeaponCollisionEnabled(ECollisionEnabled::Type CollisionEnabled);
-
 };
