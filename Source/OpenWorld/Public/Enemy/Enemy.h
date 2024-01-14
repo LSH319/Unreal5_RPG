@@ -46,8 +46,10 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
 	virtual void Die() override;
+	virtual void Attack() override;
+	virtual void PlayAttackMontage() override;
+	
 	bool InTargetRange(AActor* Target, double Radius);
 	
 	void MoveToTarget(AActor* Target);
@@ -69,12 +71,16 @@ public:
 	virtual void GetHit_Implementation(const FVector& ImpactPoint) override;
 	
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+	virtual void Destroyed() override;
 private:
 	UPROPERTY(VisibleAnywhere)
 	UHealthBarComponent* HealthBarWidget;
 	
 	UPROPERTY(VisibleAnywhere)
 	UPawnSensingComponent* PawnSensing;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AWeapon> WeaponClass;
 	
 	UPROPERTY()
 	AActor* CombatTarget;
