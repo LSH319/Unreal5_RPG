@@ -125,30 +125,10 @@ void AMyController::Equip(const FInputActionValue& InputActionValue)
 
 void AMyController::Attack(const FInputActionValue& InputActionValue)
 {
-	// UAnimInstance* AnimInstance = GetCharacter()->GetMesh()->GetAnimInstance();
-	// UAnimMontage* AttackMontage;
-	// if(AMyCharacter* MyCharacter = Cast<AMyCharacter>(ControlledCharacter))
-	// {
-	// 	AttackMontage = MyCharacter->AttackMontage;
-	// }
-	// if (AnimInstance && AttackMontage)
-	// {
-	// 	AnimInstance->Montage_Play(AttackMontage);
-	// 	int32 Selection = FMath::RandRange(0, 1);
-	// 	FName SectionName = FName();
-	// 	switch (Selection)
-	// 	{
-	// 	case 0:
-	// 		SectionName = FName("Attack1");
-	// 		break;
-	// 	case 1:
-	// 		SectionName = FName("Attack2");
-	// 		break;
-	// 	default:
-	// 		break;
-	// 	}
-	// 	AnimInstance->Montage_JumpToSection(SectionName, AttackMontage);
-	// }
+	if(AMyCharacter* MyCharacter = Cast<AMyCharacter>(GetCharacter()))
+	{
+		MyCharacter->Attack();
+	}
 }
 
 void AMyController::PlayEquipMontage(const FName& SectionName)

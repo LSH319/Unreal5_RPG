@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BaseCharacter.h"
 #include "CharacterTypes.h"
-#include "GameFramework/Character.h"
 #include "MyCharacter.generated.h"
 
 class AWeapon;
@@ -14,7 +14,7 @@ class UGroomComponent;
 class AItem;
 
 UCLASS()
-class OPENWORLD_API AMyCharacter : public ACharacter
+class OPENWORLD_API AMyCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
@@ -34,7 +34,9 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void FinishEquipping();
-	
+
+	virtual void PlayAttackMontage() override;
+	virtual bool CanAttack() override;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -42,9 +44,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UFUNCTION(BlueprintCallable)
-	void SetWeaponCollisionEnabled(ECollisionEnabled::Type CollisionEnabled);
-	
+	virtual void Attack() override;
 private:
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArm;
@@ -60,12 +60,6 @@ private:
 
 	UPROPERTY(VisibleInstanceOnly)
 	AItem* OverlappingItem;
-
-	UPROPERTY(VisibleAnywhere, Category = Weapon)
-	AWeapon* EquippedWeapon;
-	
-	UPROPERTY(EditDefaultsOnly, Category = Montages)
-	UAnimMontage* AttackMontage;
 
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	UAnimMontage* EquipMontage;

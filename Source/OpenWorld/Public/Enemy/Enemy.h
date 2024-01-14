@@ -4,17 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "CharacterTypes.h"
-#include "GameFramework/Character.h"
-#include "Interfaces/HitInterface.h"
+#include "Characters/BaseCharacter.h"
 #include "Enemy.generated.h"
 
 class UHealthBarComponent;
-class UAttributeComponent;
-class UAnimMontage;
 class UPawnSensingComponent;
 
 UCLASS()
-class OPENWORLD_API AEnemy : public ACharacter, public IHitInterface
+class OPENWORLD_API AEnemy : public ABaseCharacter
 {
 	GENERATED_BODY()
 
@@ -50,9 +47,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	void PlayHitReactMontage(const FName& SectionName);
-
-	void Die();
+	virtual void Die() override;
 	bool InTargetRange(AActor* Target, double Radius);
 	
 	void MoveToTarget(AActor* Target);
@@ -72,30 +67,14 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void GetHit_Implementation(const FVector& ImpactPoint) override;
-
-	void DirectionalHitReact(const FVector& ImpactPoint);
+	
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	UAttributeComponent* Attributes;
-	
 	UPROPERTY(VisibleAnywhere)
 	UHealthBarComponent* HealthBarWidget;
 	
 	UPROPERTY(VisibleAnywhere)
 	UPawnSensingComponent* PawnSensing;
-	
-	UPROPERTY(EditDefaultsOnly, Category = Montages)
-	UAnimMontage* HitReactMontage;
-
-	UPROPERTY(EditDefaultsOnly, Category = Montages)
-	UAnimMontage* DeathMontage;
-	
-	UPROPERTY(EditAnywhere, Category = Sounds)
-	USoundBase* HitSound;
-
-	UPROPERTY(EditAnywhere, Category = VisualEffects)
-	UParticleSystem* HitParticles;
 	
 	UPROPERTY()
 	AActor* CombatTarget;
