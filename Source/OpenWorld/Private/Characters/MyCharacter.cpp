@@ -3,6 +3,7 @@
 
 #include "Characters/MyCharacter.h"
 
+#include "Components/StaticMeshComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -13,7 +14,7 @@
 AMyCharacter::AMyCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	SpringArm->SetupAttachment(GetRootComponent());
@@ -36,6 +37,12 @@ AMyCharacter::AMyCharacter()
 	Eyebrows = CreateDefaultSubobject<UGroomComponent>(TEXT("Eyebrows"));
 	Eyebrows->SetupAttachment(GetMesh());
 	Eyebrows->AttachmentName = FString("head");
+
+	GetMesh()->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
+	GetMesh()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
+	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Overlap);
+	GetMesh()->SetGenerateOverlapEvents(true);
 }
 
 // Called when the game starts or when spawned
@@ -43,7 +50,7 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	Tags.Add(FName("MyCharacter"));
+	Tags.Add(FName("EngageableTarget"));
 }
 
 void AMyCharacter::Disarm()
@@ -62,6 +69,12 @@ void AMyCharacter::Arm()
 	}
 }
 
+void AMyCharacter::GetHit_Implementation(const FVector& ImpactPoint)
+{
+	PlayHitSound(ImpactPoint);
+	SpawnHitParticles(ImpactPoint);
+}
+
 void AMyCharacter::FinishEquipping()
 {
 	ActionState = EActionState::EAS_Unoccupied;
@@ -71,13 +84,6 @@ bool AMyCharacter::CanAttack()
 {
 	return ActionState == EActionState::EAS_Unoccupied &&
 		CharacterState != ECharacterState::ECS_Unequipped;
-}
-
-// Called every frame
-void AMyCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -95,4 +101,3 @@ void AMyCharacter::Attack()
 		ActionState = EActionState::EAS_Attacking;
 	}
 }
-

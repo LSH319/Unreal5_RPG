@@ -22,28 +22,24 @@ public:
 	// Sets default values for this character's properties
 	AMyCharacter();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void Attack() override;
+	
 	UFUNCTION(BlueprintCallable)
 	void Disarm();
 
 	UFUNCTION(BlueprintCallable)
 	void Arm();
+	virtual void GetHit_Implementation(const FVector& ImpactPoint) override;
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable)
 	void FinishEquipping();
 
 	virtual bool CanAttack() override;
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	virtual void Attack() override;
 private:
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArm;
