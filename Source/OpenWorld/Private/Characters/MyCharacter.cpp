@@ -69,16 +69,17 @@ void AMyCharacter::Arm()
 	}
 }
 
-void AMyCharacter::GetHit_Implementation(const FVector& ImpactPoint)
+void AMyCharacter::GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter)
 {
-	if (IsAlive())
+	if (IsAlive() && Hitter)
 	{
-		DirectionalHitReact(ImpactPoint);
+		DirectionalHitReact(Hitter->GetActorLocation());
 	}
 	else Die();
 	PlayHitSound(ImpactPoint);
 	SpawnHitParticles(ImpactPoint);
-
+	
+	SetWeaponCollisionEnabled(ECollisionEnabled::NoCollision);
 	ActionState = EActionState::EAS_HitReaction;
 }
 
