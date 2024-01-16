@@ -38,6 +38,9 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void FinishEquipping();
 
+	UFUNCTION(BlueprintCallable)
+	void HitReactEnd();
+	
 	virtual bool CanAttack() override;
 
 private:

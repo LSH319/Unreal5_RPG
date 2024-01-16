@@ -71,11 +71,23 @@ void AMyCharacter::Arm()
 
 void AMyCharacter::GetHit_Implementation(const FVector& ImpactPoint)
 {
+	if (IsAlive())
+	{
+		DirectionalHitReact(ImpactPoint);
+	}
+	else Die();
 	PlayHitSound(ImpactPoint);
 	SpawnHitParticles(ImpactPoint);
+
+	ActionState = EActionState::EAS_HitReaction;
 }
 
 void AMyCharacter::FinishEquipping()
+{
+	ActionState = EActionState::EAS_Unoccupied;
+}
+
+void AMyCharacter::HitReactEnd()
 {
 	ActionState = EActionState::EAS_Unoccupied;
 }
