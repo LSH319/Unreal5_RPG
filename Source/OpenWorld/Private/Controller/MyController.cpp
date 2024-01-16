@@ -85,9 +85,13 @@ void AMyController::LookUp(const FInputActionValue& InputActionValue)
 
 void AMyController::Jump(const FInputActionValue& InputActionValue)
 {
-	if (ACharacter* ControlledCharacter = GetCharacter())
+	ACharacter* ControlledCharacter = GetCharacter();
+	if (AMyCharacter* MyCharacter = Cast<AMyCharacter>(ControlledCharacter))
 	{
-		ControlledCharacter->Jump();
+		if (MyCharacter->IsUnoccupied())
+		{
+			ControlledCharacter->Jump();
+		}
 	}
 }
 

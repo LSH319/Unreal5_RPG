@@ -7,6 +7,7 @@
 #include "CharacterTypes.h"
 #include "MyCharacter.generated.h"
 
+class UMyUserWidget;
 class AWeapon;
 class USpringArmComponent;
 class UCameraComponent;
@@ -45,6 +46,10 @@ protected:
 	virtual bool CanAttack() override;
 
 private:
+	
+	void InitializeSlashOverlay();
+	void SetHUDHealth();
+	
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArm;
 
@@ -67,8 +72,13 @@ private:
 	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
 	UPROPERTY(VisibleAnywhere)
 	EActionState ActionState = EActionState::EAS_Unoccupied;
+
+	UPROPERTY()
+	UMyUserWidget* MyOverlay;
 	
 public:
+	bool IsUnoccupied();
+	
 	FORCEINLINE void SetOverlappingItem(AItem* Item){ OverlappingItem = Item; }
 	FORCEINLINE AItem* GetOverlappingItem(){ return OverlappingItem; }
 	

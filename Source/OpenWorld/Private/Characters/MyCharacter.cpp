@@ -9,6 +9,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GroomComponent.h"
 #include "Components/AttributeComponent.h"
+#include "HUD/MyHUD.h"
+#include "HUD/MyUserWidget.h"
 #include "Items/Weapons/Weapon.h"
 
 // Sets default values
@@ -52,6 +54,7 @@ void AMyCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	Tags.Add(FName("EngageableTarget"));
+	InitializeSlashOverlay();
 }
 
 void AMyCharacter::Disarm()
@@ -88,7 +91,7 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 	AActor* DamageCauser)
 {
 	HandleDamage(DamageAmount);
-	UE_LOG(LogTemp, Warning, TEXT("%f"), Attributes->GetHealthPercent());
+	SetHUDHealth();
 	return DamageAmount;
 }
 
@@ -106,6 +109,39 @@ bool AMyCharacter::CanAttack()
 {
 	return ActionState == EActionState::EAS_Unoccupied &&
 		CharacterState != ECharacterState::ECS_Unequipped;
+}
+
+bool AMyCharacter::IsUnoccupied()
+{
+	return ActionState == EActionState::EAS_Unoccupied;
+}
+
+void AMyCharacter::SetHUDHealth()
+{
+	if (MyOverlay && Attributes)
+	{
+		MyOverlay->SetHealthBarPercent(Attributes->GetHealthPercent());
+	}
+}
+
+void AMyCharacter::InitializeSlashOverlay()
+{
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	if (PlayerController)
+	{
+		AMyHUD* MyHUD = Cast<AMyHUD>(PlayerController->GetHUD());
+		if (MyHUD)
+		{
+			MyOverlay = MyHUD->GetMyOverlay();
+			if (MyOverlay && Attributes)
+			{
+				MyOverlay->SetHealthBarPercent(Attributes->GetHealthPercent());
+				MyOverlay->SetStaminaBarPercent(1.f);
+				MyOverlay->SetGold(0);
+				MyOverlay->SetSouls(0);
+			}
+		}
+	}
 }
 
 // Called to bind functionality to input
