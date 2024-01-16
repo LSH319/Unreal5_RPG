@@ -33,6 +33,7 @@ public:
 	void Arm();
 	virtual void GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter) override;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+	virtual void Die() override;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -97,6 +98,7 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void SetActionState(EActionState NewActionState)  { ActionState = NewActionState; }
+	
 	UFUNCTION(BlueprintPure)
-	EActionState GetActionState() const { return ActionState; }
+	FORCEINLINE EActionState GetActionState() const { return ActionState; }
 };
