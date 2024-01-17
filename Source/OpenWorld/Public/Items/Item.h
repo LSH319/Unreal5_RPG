@@ -7,6 +7,7 @@
 #include "Item.generated.h"
 
 class USphereComponent;
+class UNiagaraComponent;
 
 UCLASS()
 class OPENWORLD_API AItem : public AActor
@@ -27,6 +28,9 @@ protected:
 	UFUNCTION()
 	virtual void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	virtual void SpawnPickupSystem();
+	virtual void SpawnPickupSound();
+	
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* ItemMesh;
 	
@@ -34,7 +38,14 @@ protected:
 	USphereComponent* Sphere;
 
 	UPROPERTY(EditAnywhere)
-	class UNiagaraComponent* EmbersEffect;
+	class UNiagaraComponent* ItemEffect;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* PickupSound;
+
+private:
+	UPROPERTY(EditAnywhere)
+	class UNiagaraSystem* PickupEffect;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

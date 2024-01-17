@@ -47,9 +47,9 @@ void AWeapon::Equip(ACharacter* EquipCharacter, FName InSocketName, AActor* NewO
 	{
 		Sphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
-	if (EmbersEffect)
+	if (ItemEffect)
 	{
-		EmbersEffect->Deactivate();
+		ItemEffect->Deactivate();
 	}
 }
 

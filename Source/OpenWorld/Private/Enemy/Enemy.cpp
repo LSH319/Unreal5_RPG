@@ -7,6 +7,7 @@
 #include "Components/AttributeComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "HUD/HealthBarComponent.h"
+#include "Items/Soul.h"
 #include "Items/Weapons/Weapon.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "Perception/PawnSensingComponent.h"
@@ -99,14 +100,29 @@ void AEnemy::BeginPlay()
 
 void AEnemy::Die()
 {
+	Super::Die();
+	
 	EnemyState = EEnemyState::EES_Dead;
-	//PlayDeathMontage();
 	ClearAttackTimer();
 	HideHealthBar();
 	DisableCapsule();
 	SetLifeSpan(DeathLifeSpan);
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	SetWeaponCollisionEnabled(ECollisionEnabled::NoCollision);
+	SpawnSoul();
+}
+
+void AEnemy::SpawnSoul()
+{
+	UWorld* World = GetWorld();
+	if (World && SoulClass && Attributes)
+	{
+		ASoul* SpawnedSoul = World->SpawnActor<ASoul>(SoulClass, GetActorLocation(), GetActorRotation());
+		if (SpawnedSoul)
+		{
+			SpawnedSoul->SetSouls(Attributes->GetSouls());
+		}
+	}
 }
 
 void AEnemy::Attack()
@@ -143,18 +159,6 @@ void AEnemy::HandleDamage(float DamageAmount)
 		HealthBarWidget->SetHealthPercent(Attributes->GetHealthPercent());
 	}
 }
-
-// int32 AEnemy::PlayDeathMontage()
-// {
-// 	const int32 Selection = Super::PlayDeathMontage();
-// 	TEnumAsByte<EDeathPose> Pose(Selection);
-// 	if (Pose < EDeathPose::EDP_MAX)
-// 	{
-// 		DeathPose = Pose;
-// 	}
-//
-// 	return Selection;
-// }
 
 void AEnemy::InitializeEnemy()
 {

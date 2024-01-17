@@ -11,6 +11,8 @@
 #include "Components/AttributeComponent.h"
 #include "HUD/MyHUD.h"
 #include "HUD/MyUserWidget.h"
+#include "Items/Soul.h"
+#include "Items/Treasure.h"
 #include "Items/Weapons/Weapon.h"
 
 // Sets default values
@@ -46,6 +48,24 @@ AMyCharacter::AMyCharacter()
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Overlap);
 	GetMesh()->SetGenerateOverlapEvents(true);
+}
+
+void AMyCharacter::AddSouls(ASoul* Soul)
+{
+	if (Attributes && MyOverlay)
+	{
+		Attributes->AddSouls(Soul->GetSouls());
+		MyOverlay->SetSouls(Attributes->GetSouls());
+	}
+}
+
+void AMyCharacter::AddGold(ATreasure* Treasure)
+{
+	if (Attributes && MyOverlay)
+	{
+		Attributes->AddGold(Treasure->GetGold());
+		MyOverlay->SetGold(Attributes->GetGold());
+	}
 }
 
 // Called when the game starts or when spawned
@@ -104,6 +124,11 @@ void AMyCharacter::Die()
 
 	ActionState = EActionState::EAS_Dead;
 	DisableMeshCollision();
+}
+
+void AMyCharacter::SetOverlappingItem(AItem* Item)
+{
+	OverlappingItem = Item;
 }
 
 void AMyCharacter::FinishEquipping()
