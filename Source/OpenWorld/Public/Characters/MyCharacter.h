@@ -25,7 +25,7 @@ class OPENWORLD_API AMyCharacter : public ABaseCharacter, public IPickupInterfac
 public:
 	// Sets default values for this character's properties
 	AMyCharacter();
-
+	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void Attack() override;
 	
@@ -37,7 +37,8 @@ public:
 	virtual void GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter) override;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 	virtual void Die() override;
-
+	bool HasEnoughStamina();
+	bool IsOccupied();
 	virtual void SetOverlappingItem(AItem* Item) override;
 	virtual void AddSouls(ASoul* Soul) override;
 	virtual void AddGold(ATreasure* Treasure) override;

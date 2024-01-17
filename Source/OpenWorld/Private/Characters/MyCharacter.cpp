@@ -19,7 +19,7 @@
 AMyCharacter::AMyCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	SpringArm->SetupAttachment(GetRootComponent());
@@ -48,6 +48,16 @@ AMyCharacter::AMyCharacter()
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Overlap);
 	GetMesh()->SetGenerateOverlapEvents(true);
+}
+
+void AMyCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	if (Attributes && MyOverlay)
+	{
+		Attributes->RegenStamina(DeltaTime);
+		MyOverlay->SetStaminaBarPercent(Attributes->GetStaminaPercent());
+	}
 }
 
 void AMyCharacter::AddSouls(ASoul* Soul)
@@ -126,6 +136,16 @@ void AMyCharacter::Die()
 	DisableMeshCollision();
 }
 
+bool AMyCharacter::HasEnoughStamina()
+{
+	return Attributes && Attributes->GetStamina() > Attributes->GetAttackCost();
+}
+
+bool AMyCharacter::IsOccupied()
+{
+	return ActionState != EActionState::EAS_Unoccupied;
+}
+
 void AMyCharacter::SetOverlappingItem(AItem* Item)
 {
 	OverlappingItem = Item;
@@ -189,9 +209,16 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 void AMyCharacter::Attack()
 {
+	if (IsOccupied() ||!HasEnoughStamina()) return;
 	if(CanAttack())
 	{
-		PlayAttackMontage();
-		ActionState = EActionState::EAS_Attacking;
+		if (Attributes && MyOverlay)
+		{
+			Attributes->UseStamina(Attributes->GetAttackCost());
+			MyOverlay->SetStaminaBarPercent(Attributes->GetStaminaPercent());
+			
+			PlayAttackMontage();
+			ActionState = EActionState::EAS_Attacking;
+		}
 	}
 }

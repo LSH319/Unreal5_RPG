@@ -38,15 +38,14 @@ protected:
 	USphereComponent* Sphere;
 
 	UPROPERTY(EditAnywhere)
-	class UNiagaraComponent* ItemEffect;
-
-	UPROPERTY(EditAnywhere)
 	USoundBase* PickupSound;
 
 private:
 	UPROPERTY(EditAnywhere)
 	class UNiagaraSystem* PickupEffect;
 public:	
+	UPROPERTY(EditAnywhere)
+	UNiagaraComponent* ItemEffect;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 };
