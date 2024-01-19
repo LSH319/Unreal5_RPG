@@ -1,5 +1,6 @@
 # Basic RPG
 
+##GIf가 보이지 않을 경우
 [Notion Link](https://amazing-pigment-a3d.notion.site/Basic-RPG-09a849449f8f4e56857c8d6141968601)
 
 [Enhanced Input](Basic%20RPG%2009a849449f8f4e56857c8d6141968601/Enhanced%20Input%20101906a3bc7d456faa64f3090e81734a.md)
